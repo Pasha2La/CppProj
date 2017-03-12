@@ -76,7 +76,7 @@ private:
 		assert(0 <= index && index > capacity_);
 		return data_[index];
 	}
-	/*
+	
 	bool operator ==(Array& that)
 	{
 		if (this->size_ != that.size_) return false;
@@ -101,4 +101,4 @@ private:
 			}
 		}
 	}
-};*/
+};
