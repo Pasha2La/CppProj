@@ -4,15 +4,19 @@
 //!
 //! @author Pasha2La, 2017
 //‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐
-#define POISON_FLOAT (float)666.666
+#include "Vector.h"
+#define POISON_VAL 0xDEADDEAD
 
 //----------------------------------
 //! Stack class
 //----------------------------------
+template <typename value_type>
 class Stack
 {
 public:
-	typedef float value_type;	//!< Elements type
+
+	//typedef float value_type;
+
 	//‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐
 	//! Default constructor
 	//‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐-
@@ -34,7 +38,12 @@ public:
 	value_type Top() const;
 	//‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐
 	//! Returnes size of the stack
-	//! @return size of the stack
+	//! @return size_ of the stack
+	//‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐
+	size_t Size() const;
+	//‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐
+	//! Returnes capacity of the stack
+	//! @return capacity_ of the stack
 	//‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐
 	size_t Capacity() const;
 	//‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐
@@ -54,7 +63,7 @@ public:
 	//‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐-
 	~Stack();
 private:
-	static const size_t capacity_ = 6;
-	value_type data_[capacity_];
-	size_t size_;	//текущий размер стека
+	size_t capacity_;
+	Vector<value_type>* data_;
+	size_t size_;
 };

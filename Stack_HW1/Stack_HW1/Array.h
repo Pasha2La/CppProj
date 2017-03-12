@@ -6,7 +6,7 @@
 //‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐
 #include <iostream>
 #include <cassert>
-#define POISON_FLOAT (float)666.666
+#define POISON_VAL 0xDEADDEAD
 #define POISON_INT 100500
 //----------------------------------
 //! Array class
@@ -59,24 +59,32 @@ public:
 	//----------------------------------
 	void Dump(std::string a) const;
 
+
+
 private:
 	size_t size_=0;
 	static const size_t capacity_=10;
 	value_type data_[capacity_];
 
-	// lvalue (будет стоять слева, МОЖНО изменять, например a[i] = 1
-	value_type& operator [] (int index)
+	//----------------------------------
+	//! Overload of operator[] (lvalue)
+	//----------------------------------
+	value_type& operator [] (const int index)
 	{
 		assert(0 <= index && index > capacity_);
 		return data_[index];
 	}
-	// rvalue (будет стоять справа, НЕЛЬЗЯ изменять, например c = a[i]
+	//----------------------------------
+	//! Overload of operator[] (rvalue)
+	//----------------------------------
 	const value_type& operator [] (int index) const
 	{
 		assert(0 <= index && index > capacity_);
 		return data_[index];
 	}
-	
+	//----------------------------------
+	//! Overload of operator ==
+	//----------------------------------
 	bool operator ==(Array& that)
 	{
 		if (this->size_ != that.size_) return false;
@@ -87,7 +95,9 @@ private:
 		}
 		return true;
 	}
-
+	//----------------------------------
+	//! Overload of operator =
+	//----------------------------------
 	const Array& operator = (const Array& that)
 	{
 		if (this == &that)

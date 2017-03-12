@@ -4,21 +4,29 @@
 //!
 //! @author Pasha2La, 2017
 //‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐
-
-#define POISON_FLOAT (float)666.666
+#include <iostream>
+#include <cassert>
+#define POISON_VAL 0xDEADDEAD
 #define POISON_INT 100500
 //----------------------------------
 //! Vector class
 //----------------------------------
-
+template<typename value_type>
 class Vector
 {
 public:
-	typedef float value_type;
 	//‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐
 	//! Default constructor
 	//‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐-
 	Vector();
+	//‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐
+	//! Constructor with defined capacity
+	//‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐-
+	Vector(size_t capacity);
+	//‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐
+	//! Copying constructor
+	//‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐-
+	Vector(const Vector& that);						//сделать!!!!!!!!!!!!!!!!!!!!!!!!!!
 	//‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐
 	//! Silent verifier
 	//‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐
@@ -44,27 +52,23 @@ public:
 	//‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐
 	//! Insert element to Vector
 	//! @param data is an element to be pushed
-	//! @return success of operation
 	//‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐
-	bool Insert(value_type data);
+	void Insert(Vector<value_type> data);
 	//‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐
 	//! Delete element of Vector
-	//! @param index is an element to be deleted
-	//! @return success of operation
+	//! @param index is a number of element to be deleted
 	//‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐
-	bool Erase(size_t index);
+	void Erase(size_t index);
 	//----------------------------------
 	//! Dumper
 	//! @param a is the name of function called Dump()
 	//----------------------------------
 	void Dump(std::string a) const;
 
-
 private:
 	size_t size_;
 	size_t capacity_;
 	value_type* data_;
-
 	//‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐
 	//! Expands Vector on 10 elements
 	//‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐
@@ -78,12 +82,41 @@ private:
 		}
 		for (size_t i = capacity_;i < capacity_+10;i++)
 		{
-			vect[i] = POISON_FLOAT;
+			vect[i] = POISON_VAL;
 		}
 		a = vect;
 		vect = data_;
 		data_ = a;
 		delete[capacity_] vect;
 		capacity_ += 10;
+	}
+	//----------------------------------
+	//! Overload of operator[] (lvalue)
+	//----------------------------------
+	value_type& operator [] (const int index)
+	{
+		assert(0 <= index && index > capacity_);
+		return data_[index];
+	}
+	//----------------------------------
+	//! Overload of operator[] (rvalue)
+	//----------------------------------
+	const value_type& operator [] (int index) const
+	{
+		assert(0 <= index && index > capacity_);
+		return data_[index];
+	}
+	//----------------------------------
+	//! Overload of operator ==
+	//----------------------------------
+	bool operator ==(Vector& that)
+	{
+		if (this->size_ != that.size_) return false;
+		for (size_t i = 0;i < size_;i++)
+		{
+			if (this->data_[i] != that.data_[i])
+				return false;
+		}
+		return true;
 	}
 };

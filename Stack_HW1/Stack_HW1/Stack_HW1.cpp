@@ -11,23 +11,32 @@
 		this->Dump(); \
 		printf("Stack is damaged!\n"); \
 	}
-
-
-Stack::Stack() : size_(0)
+//‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐
+template<typename value_type>
+Stack<value_type>::Stack() : size_(0)
 {
-	printf("Stack's default constructor is working\n");
-	for (unsigned int i = 0;i < (int)capacity_;i++)
-		data_[i] = POISON_FLOAT;
+	capacity_ = 10;
+	data_ = new Vector<value_type>[capacity_];	//что, если память не выделится?
+	size_ = 0;
 }
-
-Stack::~Stack()
+//‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐
+template<typename value_type>
+Stack<value_type>::~Stack()
 {
-	printf("Stack's default destructor is working\n");
+	size_ = POISON_VAL;
+	capacity_ = POISON_VAL;
+	delete data_;
 }
-
-bool Stack::Push(value_type value)
+//‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐
+template<typename value_type>
+bool Stack<value_type>::Push(value_type value)
 {
 	ASSERT_OK;
+	data_->Insert(value);
+	if (size_ == capacity_) capacity_ += 10;	//внутри Insert'a вектор сам расширится
+	size++;
+	//old non-template version 
+	/*	
 	if (size_ >= capacity_)
 	{
 		ASSERT_OK;
@@ -37,14 +46,16 @@ bool Stack::Push(value_type value)
 	size_++;
 	ASSERT_OK;
 	return true;
+	*/
 }
-
-void Stack::Pop()
+//‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐
+template<typename value_type>
+void Stack<value_type>::Pop()
 {
 	ASSERT_OK;
 	if (size_ > 0)
 	{
-		data_[size_] = POISON_FLOAT;
+		data_[size_] = POISON_VAL;
 		size_--;
 	}
 	else
@@ -54,8 +65,9 @@ void Stack::Pop()
 	ASSERT_OK;
 	return;
 }
-
-Stack::value_type Stack::Top() const
+//‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐
+template<typename value_type>
+value_type Stack<value_type>::Top() const
 {
 	ASSERT_OK;
 	if (size_ > 0)
@@ -64,31 +76,41 @@ Stack::value_type Stack::Top() const
 	}
 	else
 	{
-		return POISON_FLOAT;
+		return (value_type)POISON_VAL;	//норм ли?
 	}
 }
-
-size_t Stack::Capacity() const
+//‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐
+template<typename value_type>
+size_t Stack<value_type>::Size() const
 {
 	ASSERT_OK;
-	if(Ok()) return size_;
-	//что в противном случае?
+	return size_;
 }
-
-bool Stack::Empty() const
+//‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐
+template<typename value_type>
+size_t Stack<value_type>::Capacity() const
+{
+	ASSERT_OK;
+	return capacity_;
+}
+//‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐
+template<typename value_type>
+bool Stack<value_type>::Empty() const
 {
 	ASSERT_OK;
 	if (size_ == 0) return true;
 	else return false;
 }
-
-bool Stack::Ok() const
+//‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐
+template<typename value_type>
+bool Stack<value_type>::Ok() const
 {
 	if ((size_ <= capacity_) && (size_ >= 0)) return true;
 	else return false;
 }
-
-void Stack::Dump() const
+//‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐
+template<typename value_type>
+void Stack<value_type>::Dump() const
 {
 	std::ofstream dumpfile("Dump.txt", std::ios_base::app);
 	if (!dumpfile.is_open())
@@ -112,3 +134,4 @@ void Stack::Dump() const
 	dumpfile << "}\n";
 	dumpfile.close();
 }
+//‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐

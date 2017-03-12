@@ -6,7 +6,7 @@
 
 #include <iostream>
 #include "Stack_HW1.h"
-
+/*
 //‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐
 //! A unit‐test to Push() method of Stack
 //‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐
@@ -34,14 +34,12 @@
 			printf("TEST_PUSH FAILED!");			\
 		}											\
 
-
+*/
 //‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐
 //! main
 //‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐
 int main()
 {
-	TEST_PUSH;
-	TEST_POP;
 
 	return 0;
 }

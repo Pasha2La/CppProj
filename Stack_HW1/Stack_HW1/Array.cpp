@@ -1,3 +1,4 @@
+#define _CRT_SECURE_NO_WARNINGS
 #include "Array.h"
 #include <iostream>
 #include <fstream>
@@ -32,14 +33,14 @@ Array::value_type Array::First() const
 {
 	Dump("First()");
 	if ((!IsEmpty()) && (Ok())) return data_[0];
-	else return POISON_FLOAT;		//если value_type не float, то поломается
+	else return POISON_VAL;		//если value_type не float, то поломается
 }
 
 Array::value_type Array::Last() const
 {
 	Dump("Last()");
 	if ((!IsEmpty()) && (Ok())) return data_[size_-1];
-	else return POISON_FLOAT;		//если value_type не float, то поломается
+	else return POISON_VAL;		//если value_type не float, то поломается
 }
 
 bool Array::Insert(Array::value_type data)
@@ -65,7 +66,7 @@ bool Array::Erase(size_t index)
 	Dump("Erase()");
 	if ((size_ - 1>= index) && (Ok()))
 	{
-		data_[index] = POISON_FLOAT;
+		data_[index] = POISON_VAL;
 		for (size_t i = index;i < size_ - 1;i++)
 		{
 			data_[i] = data_[i + 1];
